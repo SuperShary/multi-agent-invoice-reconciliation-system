@@ -9,7 +9,7 @@ load_dotenv()
 
 # API Configuration
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "")
-GEMINI_MODEL = "gemini-flash-latest"
+GEMINI_MODEL = "gemini-1.5-flash"
 
 # Paths
 PROJECT_ROOT = Path(__file__).parent.parent.parent

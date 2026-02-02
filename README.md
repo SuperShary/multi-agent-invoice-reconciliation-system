@@ -4,6 +4,8 @@
 [![LangGraph](https://img.shields.io/badge/LangGraph-Agentic%20AI-purple.svg)](https://langchain-ai.github.io/langgraph/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+![Dashboard Screenshot](docs/dashboard_screenshot.png)
+
 A production-grade multi-agent system that processes supplier invoices, extracts structured data using AI, matches against purchase orders with fuzzy logic, and intelligently flags discrepancies with confidence scoring.
 
 ## 🏗️ Architecture
