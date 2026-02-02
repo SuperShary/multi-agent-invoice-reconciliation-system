@@ -630,6 +630,28 @@
             margin: 0 auto 1rem;
         }
 
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 1.8rem;
@@ -802,23 +824,80 @@
 
     <script>
         let allResults = [];
+        let previousResultCount = 0;
+        let autoRefreshInterval = null;
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             fetchResults();
             updateStats();
+            startAutoRefresh();
         });
+
+        // Start auto-refresh polling
+        function startAutoRefresh() {
+            autoRefreshInterval = setInterval(() => {
+                fetchResults();
+                updateStats();
+            }, 3000); // Refresh every 3 seconds
+        }
+
+        // Stop auto-refresh
+        function stopAutoRefresh() {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+                autoRefreshInterval = null;
+            }
+        }
 
         // Fetch existing results
         async function fetchResults() {
             try {
                 const response = await fetch('/api/results');
                 const data = await response.json();
+                const newCount = data.results.length;
+
+                // Check if new results were added
+                if (newCount > previousResultCount && previousResultCount > 0) {
+                    showNotification(`✨ New invoice processed! (${newCount} total)`);
+                    // Flash animation on stats
+                    document.querySelectorAll('.stat-card').forEach(card => {
+                        card.style.animation = 'pulse 0.5s ease-out';
+                        setTimeout(() => card.style.animation = '', 500);
+                    });
+                }
+
+                previousResultCount = newCount;
                 allResults = data.results;
                 renderResults();
             } catch (error) {
                 console.error('Failed to fetch results:', error);
             }
+        }
+
+        // Show notification toast
+        function showNotification(message) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 12px;
+                font-weight: 600;
+                z-index: 2000;
+                animation: slideIn 0.3s ease-out;
+                box-shadow: 0 10px 40px rgba(0, 255, 135, 0.3);
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'fadeOut 0.3s ease-out';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
         }
 
         // Update stats
