@@ -1,0 +1,35 @@
+# Multi-Agent Invoice Reconciliation System
+# Core dependencies
+
+# Agent Framework
+langgraph>=0.0.50
+langchain>=0.1.0
+langchain-google-genai>=1.0.0
+langchain-core>=0.1.0
+
+# Document Processing
+pypdf>=3.17.0
+pdf2image>=1.16.3
+Pillow>=10.0.0
+pytesseract>=0.3.10
+
+# Fuzzy Matching
+rapidfuzz>=3.6.0
+
+# Data Validation
+pydantic>=2.5.0
+
+# BONUS: Web Dashboard
+fastapi>=0.109.0
+uvicorn>=0.27.0
+jinja2>=3.1.3
+python-multipart>=0.0.6
+
+# CLI Output
+rich>=13.7.0
+
+# Direct Gemini SDK (for agents)
+google-generativeai>=0.8.0
+
+# Environment variables
+python-dotenv>=1.0.0
