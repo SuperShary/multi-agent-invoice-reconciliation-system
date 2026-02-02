@@ -2,6 +2,7 @@
 
 import time
 import base64
+import json
 from pathlib import Path
 from typing import Tuple, Optional
 import google.generativeai as genai
@@ -56,12 +57,6 @@ CRITICAL RULES:
 Return ONLY the JSON object, no additional text or markdown formatting."""
 
 
-def encode_image_to_base64(image_path: Path) -> str:
-    """Encode image/PDF to base64 for Gemini."""
-    with open(image_path, "rb") as f:
-        return base64.b64encode(f.read()).decode("utf-8")
-
-
 def get_mime_type(file_path: Path) -> str:
     """Get MIME type based on file extension."""
     suffix = file_path.suffix.lower()
@@ -78,7 +73,6 @@ def get_mime_type(file_path: Path) -> str:
 
 def assess_document_quality(confidence: float, extracted_data: dict) -> str:
     """Assess overall document quality based on extraction results."""
-    # Check for missing critical fields
     critical_fields = ["invoice_number", "supplier_name", "line_items", "total"]
     missing_critical = sum(1 for f in critical_fields if not extracted_data.get(f))
     
@@ -92,79 +86,105 @@ def assess_document_quality(confidence: float, extracted_data: dict) -> str:
         return "poor"
 
 
-def extract_with_gemini(file_path: Path) -> Tuple[Optional[dict], float, str]:
+def extract_with_gemini(file_path: Path, max_retries: int = 3) -> Tuple[Optional[dict], float, str]:
     """
-    Extract invoice data using Gemini Vision.
+    Extract invoice data using Gemini Vision with retry logic.
     Returns: (extracted_data_dict, confidence, reasoning)
     """
-    try:
-        model = genai.GenerativeModel(GEMINI_MODEL)
-        
-        # Read and encode the file
-        file_data = encode_image_to_base64(file_path)
-        mime_type = get_mime_type(file_path)
-        
-        # Create the content with image
-        response = model.generate_content([
-            EXTRACTION_PROMPT,
-            {
-                "mime_type": mime_type,
-                "data": file_data
-            }
-        ])
-        
-        # Parse the response
-        response_text = response.text.strip()
-        
-        # Clean up response if it has markdown code blocks
-        if response_text.startswith("```"):
-            lines = response_text.split("\n")
-            response_text = "\n".join(lines[1:-1])
-        
-        import json
-        extracted_data = json.loads(response_text)
-        
-        # Calculate confidence based on extracted fields
-        total_fields = 12
-        present_fields = sum(1 for v in [
-            extracted_data.get("invoice_number"),
-            extracted_data.get("invoice_date"),
-            extracted_data.get("supplier_name"),
-            extracted_data.get("po_reference"),
-            extracted_data.get("line_items"),
-            extracted_data.get("subtotal"),
-            extracted_data.get("vat_amount"),
-            extracted_data.get("total"),
-            extracted_data.get("currency"),
-            extracted_data.get("payment_terms"),
-            extracted_data.get("supplier_address"),
-            extracted_data.get("bill_to")
-        ] if v is not None and v != "" and v != [])
-        
-        # Base confidence from field presence
-        confidence = 0.70 + (present_fields / total_fields) * 0.25
-        
-        # Boost confidence if critical fields are present
-        if all([
-            extracted_data.get("invoice_number"),
-            extracted_data.get("supplier_name"),
-            extracted_data.get("line_items"),
-            extracted_data.get("total")
-        ]):
-            confidence = min(confidence + 0.05, 0.98)
-        
-        reasoning = f"Successfully extracted invoice data using Gemini Vision. Found {len(extracted_data.get('line_items', []))} line items. "
-        reasoning += f"Critical fields present: invoice_number={bool(extracted_data.get('invoice_number'))}, "
-        reasoning += f"supplier={bool(extracted_data.get('supplier_name'))}, "
-        reasoning += f"PO_ref={bool(extracted_data.get('po_reference'))}, "
-        reasoning += f"total={bool(extracted_data.get('total'))}."
-        
-        return extracted_data, confidence, reasoning
-        
-    except json.JSONDecodeError as e:
-        return None, 0.0, f"Failed to parse Gemini response as JSON: {str(e)}"
-    except Exception as e:
-        return None, 0.0, f"Gemini extraction failed: {str(e)}"
+    for attempt in range(max_retries):
+        try:
+            # Upload the file using Gemini File API
+            uploaded_file = genai.upload_file(str(file_path))
+            
+            # Wait for file to be processed
+            while uploaded_file.state.name == "PROCESSING":
+                time.sleep(1)
+                uploaded_file = genai.get_file(uploaded_file.name)
+            
+            model = genai.GenerativeModel(GEMINI_MODEL)
+            
+            # Generate content with the uploaded file
+            response = model.generate_content([
+                EXTRACTION_PROMPT,
+                uploaded_file
+            ])
+            
+            # Clean up uploaded file
+            try:
+                genai.delete_file(uploaded_file.name)
+            except:
+                pass
+            
+            # Parse the response
+            response_text = response.text.strip()
+            
+            # Clean up response if it has markdown code blocks
+            if response_text.startswith("```"):
+                lines = response_text.split("\n")
+                # Find the closing ``` and remove both
+                if lines[-1].strip() == "```":
+                    response_text = "\n".join(lines[1:-1])
+                else:
+                    response_text = "\n".join(lines[1:])
+            
+            # Also handle ```json prefix
+            if response_text.startswith("json"):
+                response_text = response_text[4:].strip()
+            
+            extracted_data = json.loads(response_text)
+            
+            # Calculate confidence based on extracted fields
+            total_fields = 12
+            present_fields = sum(1 for v in [
+                extracted_data.get("invoice_number"),
+                extracted_data.get("invoice_date"),
+                extracted_data.get("supplier_name"),
+                extracted_data.get("po_reference"),
+                extracted_data.get("line_items"),
+                extracted_data.get("subtotal"),
+                extracted_data.get("vat_amount"),
+                extracted_data.get("total"),
+                extracted_data.get("currency"),
+                extracted_data.get("payment_terms"),
+                extracted_data.get("supplier_address"),
+                extracted_data.get("bill_to")
+            ] if v is not None and v != "" and v != [])
+            
+            # Base confidence from field presence
+            confidence = 0.70 + (present_fields / total_fields) * 0.25
+            
+            # Boost confidence if critical fields are present
+            if all([
+                extracted_data.get("invoice_number"),
+                extracted_data.get("supplier_name"),
+                extracted_data.get("line_items"),
+                extracted_data.get("total")
+            ]):
+                confidence = min(confidence + 0.05, 0.98)
+            
+            reasoning = f"Successfully extracted invoice data using Gemini Vision. Found {len(extracted_data.get('line_items', []))} line items. "
+            reasoning += f"Critical fields present: invoice_number={bool(extracted_data.get('invoice_number'))}, "
+            reasoning += f"supplier={bool(extracted_data.get('supplier_name'))}, "
+            reasoning += f"PO_ref={bool(extracted_data.get('po_reference'))}, "
+            reasoning += f"total={bool(extracted_data.get('total'))}."
+            
+            return extracted_data, confidence, reasoning
+            
+        except json.JSONDecodeError as e:
+            return None, 0.0, f"Failed to parse Gemini response as JSON: {str(e)}"
+        except Exception as e:
+            error_msg = str(e)
+            # Check if it's a rate limit error
+            if "429" in error_msg or "quota" in error_msg.lower() or "rate" in error_msg.lower():
+                if attempt < max_retries - 1:
+                    # Wait and retry with exponential backoff
+                    wait_time = (attempt + 1) * 30  # 30s, 60s, 90s
+                    print(f"Rate limited, waiting {wait_time}s before retry {attempt + 2}/{max_retries}...")
+                    time.sleep(wait_time)
+                    continue
+            return None, 0.0, f"Gemini extraction failed: {error_msg}"
+    
+    return None, 0.0, "Extraction failed after all retries"
 
 
 def dict_to_extracted_invoice(data: dict) -> ExtractedInvoice:
@@ -208,7 +228,7 @@ def document_intelligence_agent(state: AgentState) -> AgentState:
     
     invoice_path = Path(state["invoice_path"])
     
-    # Extract using Gemini
+    # Extract using Gemini with retry logic
     extracted_dict, confidence, reasoning = extract_with_gemini(invoice_path)
     
     if extracted_dict is None:

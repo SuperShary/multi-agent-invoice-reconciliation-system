@@ -265,9 +265,9 @@ def process_all_invoices():
     # Invoice 5 - Missing PO
     inv5_result = next((r for r in results if "Invoice_5" in r.get("document_info", {}).get("filename", "")), None)
     if inv5_result:
-        matching = inv5_result.get("processing_results", {}).get("matching_results", {})
-        matched_po = matching.get("matched_po", "")
-        console.print(f"  Invoice 5 (Missing PO): {'[green]✓ Matched to ' + matched_po + '[/green]' if matched_po else '[red]✗ NO MATCH[/red]'}")
+        matching = inv5_result.get("processing_results", {}).get("matching_results") or {}
+        matched_po = matching.get("matched_po", "") if matching else ""
+        console.print(f"  Invoice 5 (Missing PO): {'[green]✓ Matched to ' + str(matched_po) + '[/green]' if matched_po else '[red]✗ NO MATCH[/red]'}")
     
     return results
 

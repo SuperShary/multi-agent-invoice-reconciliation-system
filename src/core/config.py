@@ -1,15 +1,15 @@
-"""Configuration and constants for the invoice reconciliation system."""
+"""Configuration for the multi-agent invoice reconciliation system."""
 
 import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Load environment variables
+# Load .env file
 load_dotenv()
 
 # API Configuration
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "")
-GEMINI_MODEL = "gemini-1.5-flash"
+GEMINI_MODEL = "gemini-flash-latest"
 
 # Paths
 PROJECT_ROOT = Path(__file__).parent.parent.parent

@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Reconciliation Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0f0f23;
+            --bg-card: #1a1a2e;
+            --bg-card-hover: #252541;
+            --accent-green: #00ff87;
+            --accent-blue: #00d4ff;
+            --accent-purple: #7c3aed;
+            --accent-orange: #ff9f43;
+            --accent-red: #ff6b6b;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b8;
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 20% 80%, rgba(124, 58, 237, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(0, 255, 135, 0.05) 0%, transparent 50%);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .header .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            background: var(--bg-card-hover);
+            border-color: var(--accent-blue);
+            box-shadow: 0 10px 40px rgba(0, 212, 255, 0.1);
+        }
+
+        .stat-card .icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-card.green .icon { background: rgba(0, 255, 135, 0.15); color: var(--accent-green); }
+        .stat-card.blue .icon { background: rgba(0, 212, 255, 0.15); color: var(--accent-blue); }
+        .stat-card.orange .icon { background: rgba(255, 159, 67, 0.15); color: var(--accent-orange); }
+        .stat-card.red .icon { background: rgba(255, 107, 107, 0.15); color: var(--accent-red); }
+        .stat-card.purple .icon { background: rgba(124, 58, 237, 0.15); color: var(--accent-purple); }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-card .label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Agent Pipeline Visualization */
+        .pipeline-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title i {
+            color: var(--accent-purple);
+        }
+
+        .agent-pipeline {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+        }
+
+        .agent-node {
+            flex: 1;
+            min-width: 180px;
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1.25rem;
+            border: 2px solid var(--border-color);
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .agent-node.active {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 20px rgba(0, 255, 135, 0.2);
+        }
+
+        .agent-node .agent-icon {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 0.75rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+        }
+
+        .agent-node:nth-child(1) .agent-icon { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .agent-node:nth-child(2) .agent-icon { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .agent-node:nth-child(3) .agent-icon { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+        .agent-node:nth-child(4) .agent-icon { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+        .agent-node:nth-child(5) .agent-icon { background: linear-gradient(135deg, #fa709a, #fee140); }
+
+        .agent-node .agent-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            font-size: 0.85rem;
+        }
+
+        .agent-node .agent-status {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .connector {
+            display: flex;
+            align-items: center;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+
+        /* Results Table */
+        .results-section {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .results-table th {
+            text-align: left;
+            padding: 1rem 1.5rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .results-table td {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+
+        .results-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .results-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .invoice-id {
+            font-weight: 600;
+            color: var(--accent-blue);
+        }
+
+        .confidence-bar {
+            width: 100px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .confidence-bar .fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .status-badge.approve {
+            background: rgba(0, 255, 135, 0.15);
+            color: var(--accent-green);
+        }
+
+        .status-badge.review {
+            background: rgba(255, 159, 67, 0.15);
+            color: var(--accent-orange);
+        }
+
+        .status-badge.escalate {
+            background: rgba(255, 107, 107, 0.15);
+            color: var(--accent-red);
+        }
+
+        .discrepancy-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 28px;
+            height: 28px;
+            background: rgba(255, 107, 107, 0.15);
+            color: var(--accent-red);
+            border-radius: 50%;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .discrepancy-count.zero {
+            background: rgba(0, 255, 135, 0.15);
+            color: var(--accent-green);
+        }
+
+        /* Upload Section */
+        .upload-section {
+            margin-bottom: 3rem;
+        }
+
+        .upload-zone {
+            background: var(--bg-card);
+            border: 2px dashed var(--border-color);
+            border-radius: 16px;
+            padding: 3rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-zone:hover {
+            border-color: var(--accent-purple);
+            background: var(--bg-card-hover);
+        }
+
+        .upload-zone i {
+            font-size: 3rem;
+            color: var(--accent-purple);
+            margin-bottom: 1rem;
+        }
+
+        .upload-zone h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-zone p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .animate-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .results-table {
+                font-size: 0.85rem;
+            }
+            
+            .results-table th,
+            .results-table td {
+                padding: 0.75rem;
+            }
+        }
+
+        /* Loading State */
+        .loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 15, 35, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .loading.active {
+            display: flex;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--border-color);
+            border-top-color: var(--accent-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            margin-top: 1.5rem;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1><i class="fas fa-robot"></i> Invoice Reconciliation</h1>
+            <p class="subtitle">Multi-Agent AI System • Powered by Gemini Vision & LangGraph</p>
+        </header>
+
+        <!-- Stats -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card blue">
+                <div class="icon"><i class="fas fa-file-invoice"></i></div>
+                <div class="value" id="totalInvoices">{{ total_invoices }}</div>
+                <div class="label">Total Invoices</div>
+            </div>
+            <div class="stat-card green">
+                <div class="icon"><i class="fas fa-check-circle"></i></div>
+                <div class="value" id="autoApproved">0</div>
+                <div class="label">Auto Approved</div>
+            </div>
+            <div class="stat-card orange">
+                <div class="icon"><i class="fas fa-flag"></i></div>
+                <div class="value" id="flaggedReview">0</div>
+                <div class="label">Flagged for Review</div>
+            </div>
+            <div class="stat-card red">
+                <div class="icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="value" id="escalated">0</div>
+                <div class="label">Escalated</div>
+            </div>
+            <div class="stat-card purple">
+                <div class="icon"><i class="fas fa-tachometer-alt"></i></div>
+                <div class="value" id="avgConfidence">0%</div>
+                <div class="label">Avg Confidence</div>
+            </div>
+        </div>
+
+        <!-- Agent Pipeline -->
+        <section class="pipeline-section">
+            <h2 class="section-title"><i class="fas fa-project-diagram"></i> Agent Pipeline</h2>
+            <div class="agent-pipeline">
+                <div class="agent-node">
+                    <div class="agent-icon"><i class="fas fa-eye"></i></div>
+                    <div class="agent-name">Document Intelligence</div>
+                    <div class="agent-status">Gemini Vision • OCR</div>
+                </div>
+                <div class="connector"><i class="fas fa-chevron-right"></i></div>
+                <div class="agent-node">
+                    <div class="agent-icon"><i class="fas fa-link"></i></div>
+                    <div class="agent-name">Matching Agent</div>
+                    <div class="agent-status">3-Tier Fuzzy Match</div>
+                </div>
+                <div class="connector"><i class="fas fa-chevron-right"></i></div>
+                <div class="agent-node">
+                    <div class="agent-icon"><i class="fas fa-search-dollar"></i></div>
+                    <div class="agent-name">Discrepancy Detection</div>
+                    <div class="agent-status">Price & Qty Analysis</div>
+                </div>
+                <div class="connector"><i class="fas fa-chevron-right"></i></div>
+                <div class="agent-node">
+                    <div class="agent-icon"><i class="fas fa-gavel"></i></div>
+                    <div class="agent-name">Resolution Agent</div>
+                    <div class="agent-status">Decision Matrix</div>
+                </div>
+                <div class="connector"><i class="fas fa-chevron-right"></i></div>
+                <div class="agent-node">
+                    <div class="agent-icon"><i class="fas fa-user-check"></i></div>
+                    <div class="agent-name">Human Reviewer</div>
+                    <div class="agent-status">Feedback Loop</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results -->
+        <section class="results-section">
+            <h2 class="section-title"><i class="fas fa-clipboard-list"></i> Processing Results</h2>
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>Invoice ID</th>
+                        <th>File</th>
+                        <th>Matched PO</th>
+                        <th>Confidence</th>
+                        <th>Discrepancies</th>
+                        <th>Action</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsBody">
+                    {% for result in results %}
+                    <tr>
+                        <td class="invoice-id">{{ result.invoice_id }}</td>
+                        <td>{{ result.document_info.filename }}</td>
+                        <td>
+                            {% if result.processing_results.matching_results %}
+                                {{ result.processing_results.matching_results.matched_po or 'N/A' }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <div class="confidence-bar">
+                                    <div class="fill" style="width: {{ result.processing_results.extraction_confidence * 100 }}%"></div>
+                                </div>
+                                <span>{{ (result.processing_results.extraction_confidence * 100)|round|int }}%</span>
+                            </div>
+                        </td>
+                        <td>
+                            {% set disc_count = result.processing_results.discrepancies|length %}
+                            <span class="discrepancy-count {{ 'zero' if disc_count == 0 else '' }}">{{ disc_count }}</span>
+                        </td>
+                        <td>
+                            {% set action = result.processing_results.recommended_action %}
+                            {% if action == 'auto_approve' %}
+                                <span class="status-badge approve"><i class="fas fa-check"></i> Approve</span>
+                            {% elif action == 'flag_for_review' %}
+                                <span class="status-badge review"><i class="fas fa-flag"></i> Review</span>
+                            {% else %}
+                                <span class="status-badge escalate"><i class="fas fa-exclamation-triangle"></i> Escalate</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ result.processing_duration_seconds }}s</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p class="loading-text">Processing invoice with AI agents...</p>
+    </div>
+
+    <script>
+        // Fetch and update stats
+        async function updateStats() {
+            try {
+                const response = await fetch('/api/stats');
+                const data = await response.json();
+                
+                document.getElementById('totalInvoices').textContent = data.total_invoices;
+                document.getElementById('autoApproved').textContent = data.auto_approved;
+                document.getElementById('flaggedReview').textContent = data.flagged_for_review;
+                document.getElementById('escalated').textContent = data.escalated;
+                document.getElementById('avgConfidence').textContent = data.avg_confidence + '%';
+            } catch (error) {
+                console.error('Failed to fetch stats:', error);
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateStats();
+            
+            // Add animation delays to stat cards
+            document.querySelectorAll('.stat-card').forEach((card, i) => {
+                card.style.animationDelay = `${i * 0.1}s`;
+            });
+            
+            // Add animation delays to agent nodes
+            document.querySelectorAll('.agent-node').forEach((node, i) => {
+                node.style.animationDelay = `${i * 0.15}s`;
+            });
+        });
+    </script>
+</body>
+</html>
