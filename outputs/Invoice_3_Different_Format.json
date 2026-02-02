@@ -1,14 +1,14 @@
 {
   "invoice_id": "MC-INV-3421",
-  "processing_timestamp": "2026-02-02T03:06:16.802256Z",
-  "processing_duration_seconds": 11.82,
+  "processing_timestamp": "2026-02-02T03:48:11.429104Z",
+  "processing_duration_seconds": 15.02,
   "document_info": {
     "filename": "Invoice_3_Different_Format.pdf",
     "file_size_kb": 2.9,
     "document_quality": "excellent"
   },
   "processing_results": {
-    "extraction_confidence": 0.98,
+    "extraction_confidence": 0.95,
     "document_quality": "excellent",
     "extracted_data": {
       "invoice_number": "MC-INV-3421",
@@ -85,15 +85,15 @@
     },
     "recommended_action": "auto_approve",
     "risk_level": "low",
-    "confidence": 0.98,
-    "agent_reasoning": "Successfully extracted invoice data using Gemini Vision. Found 4 line items. Critical fields present: invoice_number=True, supplier=True, PO_ref=True, total=True. Found exact PO reference match: 'PO-2024-003' exists in database. Matched PO: PO-2024-003. Supplier match: True (100% similarity). Line items matched: 4/4. No discrepancies detected. All line items match PO prices and quantities within tolerance. Invoice MC-INV-3421 processed with 98% extraction confidence. Document quality assessed as 'excellent'. Matched to PO-2024-003 via exact po reference (98% confidence). No discrepancies detected. No significant risk factors identified. RECOMMENDATION: AUTO_APPROVE. All criteria met for automatic approval. High confidence extraction, exact PO match, no discrepancies."
+    "confidence": 0.97,
+    "agent_reasoning": "Successfully extracted invoice data using Gemini Vision. Found 4 line items. Critical fields: 4/4, Optional: 8/8. PO ref present: True. Found exact PO reference match: 'PO-2024-003' exists in database. Matched PO: PO-2024-003. Supplier match: True (100% similarity). Line items matched: 4/4. No discrepancies detected. All line items match PO prices and quantities within tolerance. Invoice MC-INV-3421 processed with 95% extraction confidence. Document quality assessed as 'excellent'. Matched to PO-2024-003 via exact po reference (98% confidence). No discrepancies detected. No significant risk factors identified. RECOMMENDATION: AUTO_APPROVE. All criteria met for automatic approval. High confidence extraction, exact PO match, no discrepancies."
   },
   "agent_execution_trace": {
     "document_intelligence_agent": {
-      "duration_ms": 11801,
-      "confidence": 0.98,
+      "duration_ms": 15006,
+      "confidence": 0.95,
       "status": "success",
-      "reasoning": "Successfully extracted invoice data using Gemini Vision. Found 4 line items. Critical fields present: invoice_number=True, supplier=True, PO_ref=True, total=True."
+      "reasoning": "Successfully extracted invoice data using Gemini Vision. Found 4 line items. Critical fields: 4/4, Optional: 8/8. PO ref present: True."
     },
     "matching_agent": {
       "duration_ms": 1,

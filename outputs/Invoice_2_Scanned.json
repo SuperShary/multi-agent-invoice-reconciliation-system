@@ -1,14 +1,14 @@
 {
   "invoice_id": "BA-2024-2156",
-  "processing_timestamp": "2026-02-02T03:06:04.975157Z",
-  "processing_duration_seconds": 14.47,
+  "processing_timestamp": "2026-02-02T03:47:56.403976Z",
+  "processing_duration_seconds": 16.0,
   "document_info": {
     "filename": "Invoice_2_Scanned.pdf",
     "file_size_kb": 102.9,
     "document_quality": "excellent"
   },
   "processing_results": {
-    "extraction_confidence": 0.98,
+    "extraction_confidence": 0.95,
     "document_quality": "excellent",
     "extracted_data": {
       "invoice_number": "BA-2024-2156",
@@ -20,7 +20,7 @@
       "payment_terms": "Net 30 Days",
       "bill_to": {
         "company": "NIYAMRAI Limited",
-        "address": "Hayes Business Centre\nUxbridge, UB4 0NE\nUnited Kingdom"
+        "address": "Hayes Business Centre, Uxbridge, UB4 0NE, United Kingdom"
       },
       "line_items": [
         {
@@ -76,15 +76,15 @@
     },
     "recommended_action": "auto_approve",
     "risk_level": "low",
-    "confidence": 0.98,
-    "agent_reasoning": "Successfully extracted invoice data using Gemini Vision. Found 3 line items. Critical fields present: invoice_number=True, supplier=True, PO_ref=True, total=True. Found exact PO reference match: 'PO-2024-002' exists in database. Matched PO: PO-2024-002. Supplier match: True (100% similarity). Line items matched: 3/3. No discrepancies detected. All line items match PO prices and quantities within tolerance. Invoice BA-2024-2156 processed with 98% extraction confidence. Document quality assessed as 'excellent'. Matched to PO-2024-002 via exact po reference (98% confidence). No discrepancies detected. No significant risk factors identified. RECOMMENDATION: AUTO_APPROVE. All criteria met for automatic approval. High confidence extraction, exact PO match, no discrepancies."
+    "confidence": 0.97,
+    "agent_reasoning": "Successfully extracted invoice data using Gemini Vision. Found 3 line items. Critical fields: 4/4, Optional: 8/8. PO ref present: True. Found exact PO reference match: 'PO-2024-002' exists in database. Matched PO: PO-2024-002. Supplier match: True (100% similarity). Line items matched: 3/3. No discrepancies detected. All line items match PO prices and quantities within tolerance. Invoice BA-2024-2156 processed with 95% extraction confidence. Document quality assessed as 'excellent'. Matched to PO-2024-002 via exact po reference (98% confidence). No discrepancies detected. No significant risk factors identified. RECOMMENDATION: AUTO_APPROVE. All criteria met for automatic approval. High confidence extraction, exact PO match, no discrepancies."
   },
   "agent_execution_trace": {
     "document_intelligence_agent": {
-      "duration_ms": 14450,
-      "confidence": 0.98,
+      "duration_ms": 15974,
+      "confidence": 0.95,
       "status": "success",
-      "reasoning": "Successfully extracted invoice data using Gemini Vision. Found 3 line items. Critical fields present: invoice_number=True, supplier=True, PO_ref=True, total=True."
+      "reasoning": "Successfully extracted invoice data using Gemini Vision. Found 3 line items. Critical fields: 4/4, Optional: 8/8. PO ref present: True."
     },
     "matching_agent": {
       "duration_ms": 1,

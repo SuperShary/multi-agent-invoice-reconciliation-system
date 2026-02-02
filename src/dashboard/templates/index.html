@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,7 +36,6 @@
             overflow-x: hidden;
         }
 
-        /* Animated background */
         .bg-animation {
             position: fixed;
             top: 0;
@@ -43,7 +43,7 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: 
+            background:
                 radial-gradient(ellipse at 20% 80%, rgba(124, 58, 237, 0.15) 0%, transparent 50%),
                 radial-gradient(ellipse at 80% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
                 radial-gradient(ellipse at 50% 50%, rgba(0, 255, 135, 0.05) 0%, transparent 50%);
@@ -55,15 +55,14 @@
             padding: 2rem;
         }
 
-        /* Header */
         .header {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
             animation: fadeIn 0.6s ease-out;
         }
 
         .header h1 {
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             font-weight: 700;
             background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
             -webkit-background-clip: text;
@@ -74,70 +73,87 @@
 
         .header .subtitle {
             color: var(--text-secondary);
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
 
         /* Stats Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
 
         .stat-card {
             background: var(--bg-card);
             border-radius: 16px;
-            padding: 1.5rem;
+            padding: 1.25rem;
             border: 1px solid var(--border-color);
             transition: all 0.3s ease;
-            animation: slideUp 0.5s ease-out;
         }
 
         .stat-card:hover {
             transform: translateY(-4px);
             background: var(--bg-card-hover);
             border-color: var(--accent-blue);
-            box-shadow: 0 10px 40px rgba(0, 212, 255, 0.1);
         }
 
         .stat-card .icon {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
         }
 
-        .stat-card.green .icon { background: rgba(0, 255, 135, 0.15); color: var(--accent-green); }
-        .stat-card.blue .icon { background: rgba(0, 212, 255, 0.15); color: var(--accent-blue); }
-        .stat-card.orange .icon { background: rgba(255, 159, 67, 0.15); color: var(--accent-orange); }
-        .stat-card.red .icon { background: rgba(255, 107, 107, 0.15); color: var(--accent-red); }
-        .stat-card.purple .icon { background: rgba(124, 58, 237, 0.15); color: var(--accent-purple); }
+        .stat-card.green .icon {
+            background: rgba(0, 255, 135, 0.15);
+            color: var(--accent-green);
+        }
+
+        .stat-card.blue .icon {
+            background: rgba(0, 212, 255, 0.15);
+            color: var(--accent-blue);
+        }
+
+        .stat-card.orange .icon {
+            background: rgba(255, 159, 67, 0.15);
+            color: var(--accent-orange);
+        }
+
+        .stat-card.red .icon {
+            background: rgba(255, 107, 107, 0.15);
+            color: var(--accent-red);
+        }
+
+        .stat-card.purple .icon {
+            background: rgba(124, 58, 237, 0.15);
+            color: var(--accent-purple);
+        }
 
         .stat-card .value {
-            font-size: 2rem;
+            font-size: 1.75rem;
             font-weight: 700;
             margin-bottom: 0.25rem;
         }
 
         .stat-card .label {
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
-        /* Agent Pipeline Visualization */
-        .pipeline-section {
-            margin-bottom: 3rem;
+        /* Upload Section */
+        .upload-section {
+            margin-bottom: 2rem;
         }
 
         .section-title {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 600;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
             gap: 0.75rem;
@@ -147,22 +163,66 @@
             color: var(--accent-purple);
         }
 
+        .upload-zone {
+            background: var(--bg-card);
+            border: 2px dashed var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .upload-zone:hover,
+        .upload-zone.dragover {
+            border-color: var(--accent-purple);
+            background: var(--bg-card-hover);
+        }
+
+        .upload-zone i {
+            font-size: 2.5rem;
+            color: var(--accent-purple);
+            margin-bottom: 1rem;
+        }
+
+        .upload-zone h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .upload-zone p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .upload-zone input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        /* Agent Pipeline */
         .agent-pipeline {
             display: flex;
             gap: 0.5rem;
             overflow-x: auto;
             padding: 1rem 0;
+            margin-bottom: 2rem;
         }
 
         .agent-node {
             flex: 1;
-            min-width: 180px;
+            min-width: 150px;
             background: var(--bg-card);
             border-radius: 12px;
-            padding: 1.25rem;
+            padding: 1rem;
             border: 2px solid var(--border-color);
             text-align: center;
-            position: relative;
             transition: all 0.3s ease;
         }
 
@@ -171,31 +231,54 @@
             box-shadow: 0 0 20px rgba(0, 255, 135, 0.2);
         }
 
+        .agent-node.processing {
+            border-color: var(--accent-blue);
+            animation: pulse 1.5s infinite;
+        }
+
+        .agent-node.completed {
+            border-color: var(--accent-green);
+        }
+
         .agent-node .agent-icon {
-            width: 50px;
-            height: 50px;
-            margin: 0 auto 0.75rem;
+            width: 45px;
+            height: 45px;
+            margin: 0 auto 0.5rem;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
         }
 
-        .agent-node:nth-child(1) .agent-icon { background: linear-gradient(135deg, #667eea, #764ba2); }
-        .agent-node:nth-child(2) .agent-icon { background: linear-gradient(135deg, #f093fb, #f5576c); }
-        .agent-node:nth-child(3) .agent-icon { background: linear-gradient(135deg, #4facfe, #00f2fe); }
-        .agent-node:nth-child(4) .agent-icon { background: linear-gradient(135deg, #43e97b, #38f9d7); }
-        .agent-node:nth-child(5) .agent-icon { background: linear-gradient(135deg, #fa709a, #fee140); }
+        .agent-node:nth-child(1) .agent-icon {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .agent-node:nth-child(3) .agent-icon {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+
+        .agent-node:nth-child(5) .agent-icon {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+        }
+
+        .agent-node:nth-child(7) .agent-icon {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+        }
+
+        .agent-node:nth-child(9) .agent-icon {
+            background: linear-gradient(135deg, #fa709a, #fee140);
+        }
 
         .agent-node .agent-name {
             font-weight: 600;
             margin-bottom: 0.25rem;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         .agent-node .agent-status {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--text-secondary);
         }
 
@@ -203,14 +286,111 @@
             display: flex;
             align-items: center;
             color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        /* Processing Modal */
+        .processing-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 15, 35, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .processing-modal.active {
+            display: flex;
+        }
+
+        .processing-content {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .processing-content h2 {
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .agent-progress {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .agent-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+
+        .agent-step .step-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--bg-card-hover);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .agent-step.active .step-icon {
+            border-color: var(--accent-blue);
+            animation: pulse 1.5s infinite;
+        }
+
+        .agent-step.completed .step-icon {
+            border-color: var(--accent-green);
+            background: rgba(0, 255, 135, 0.15);
+            color: var(--accent-green);
+        }
+
+        .agent-step .step-name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .progress-bar-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .status-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
         }
 
         /* Results Table */
         .results-section {
             background: var(--bg-card);
             border-radius: 20px;
-            padding: 2rem;
+            padding: 1.5rem;
             border: 1px solid var(--border-color);
         }
 
@@ -221,19 +401,20 @@
 
         .results-table th {
             text-align: left;
-            padding: 1rem 1.5rem;
+            padding: 0.75rem 1rem;
             color: var(--text-secondary);
             font-weight: 500;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             border-bottom: 1px solid var(--border-color);
         }
 
         .results-table td {
-            padding: 1.25rem 1.5rem;
+            padding: 1rem;
             border-bottom: 1px solid var(--border-color);
             vertical-align: middle;
+            font-size: 0.9rem;
         }
 
         .results-table tr:last-child td {
@@ -250,7 +431,7 @@
         }
 
         .confidence-bar {
-            width: 100px;
+            width: 80px;
             height: 8px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 4px;
@@ -261,16 +442,15 @@
             height: 100%;
             background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
             border-radius: 4px;
-            transition: width 0.5s ease;
         }
 
         .status-badge {
             display: inline-flex;
             align-items: center;
             gap: 0.4rem;
-            padding: 0.4rem 0.8rem;
+            padding: 0.35rem 0.7rem;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 500;
             text-transform: uppercase;
         }
@@ -294,12 +474,12 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            min-width: 28px;
-            height: 28px;
+            min-width: 26px;
+            height: 26px;
             background: rgba(255, 107, 107, 0.15);
             color: var(--accent-red);
             border-radius: 50%;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
         }
 
@@ -308,133 +488,171 @@
             color: var(--accent-green);
         }
 
-        /* Upload Section */
-        .upload-section {
-            margin-bottom: 3rem;
-        }
-
-        .upload-zone {
-            background: var(--bg-card);
-            border: 2px dashed var(--border-color);
-            border-radius: 16px;
-            padding: 3rem;
-            text-align: center;
+        .view-btn {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            border: none;
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
             cursor: pointer;
+            font-size: 0.8rem;
             transition: all 0.3s ease;
         }
 
-        .upload-zone:hover {
-            border-color: var(--accent-purple);
-            background: var(--bg-card-hover);
+        .view-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
         }
 
-        .upload-zone i {
-            font-size: 3rem;
-            color: var(--accent-purple);
-            margin-bottom: 1rem;
-        }
-
-        .upload-zone h3 {
-            margin-bottom: 0.5rem;
-        }
-
-        .upload-zone p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideUp {
-            from { 
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to { 
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .animate-pulse {
-            animation: pulse 2s infinite;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .container {
-                padding: 1rem;
-            }
-            
-            .results-table {
-                font-size: 0.85rem;
-            }
-            
-            .results-table th,
-            .results-table td {
-                padding: 0.75rem;
-            }
-        }
-
-        /* Loading State */
-        .loading {
+        /* Detail Modal */
+        .detail-modal {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(15, 15, 35, 0.9);
+            background: rgba(15, 15, 35, 0.95);
             z-index: 1000;
             justify-content: center;
             align-items: center;
-            flex-direction: column;
+            padding: 2rem;
         }
 
-        .loading.active {
+        .detail-modal.active {
             display: flex;
         }
 
-        .spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid var(--border-color);
-            border-top-color: var(--accent-green);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        .detail-content {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 800px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+        }
+
+        .detail-content h2 {
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .detail-item {
+            background: var(--bg-card-hover);
+            padding: 1rem;
+            border-radius: 12px;
+        }
+
+        .detail-item label {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-item .value {
+            font-weight: 600;
+        }
+
+        .discrepancy-list {
+            margin-top: 1.5rem;
+        }
+
+        .discrepancy-list h3 {
+            margin-bottom: 1rem;
+            color: var(--accent-orange);
+        }
+
+        .discrepancy-item {
+            background: rgba(255, 107, 107, 0.1);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 0.5rem;
+            border-left: 3px solid var(--accent-red);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
-        .loading-text {
-            margin-top: 1.5rem;
-            font-size: 1.1rem;
-            color: var(--text-secondary);
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--accent-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="bg-animation"></div>
-    
+
     <div class="container">
         <!-- Header -->
         <header class="header">
@@ -446,7 +664,7 @@
         <div class="stats-grid" id="statsGrid">
             <div class="stat-card blue">
                 <div class="icon"><i class="fas fa-file-invoice"></i></div>
-                <div class="value" id="totalInvoices">{{ total_invoices }}</div>
+                <div class="value" id="totalInvoices">0</div>
                 <div class="label">Total Invoices</div>
             </div>
             <div class="stat-card green">
@@ -471,37 +689,48 @@
             </div>
         </div>
 
+        <!-- Upload Section -->
+        <section class="upload-section">
+            <h2 class="section-title"><i class="fas fa-cloud-upload-alt"></i> Upload Invoice</h2>
+            <div class="upload-zone" id="uploadZone">
+                <i class="fas fa-file-pdf"></i>
+                <h3>Drag & Drop Invoice PDF</h3>
+                <p>or click to browse • Supports PDF, PNG, JPG</p>
+                <input type="file" id="fileInput" accept=".pdf,.png,.jpg,.jpeg">
+            </div>
+        </section>
+
         <!-- Agent Pipeline -->
         <section class="pipeline-section">
             <h2 class="section-title"><i class="fas fa-project-diagram"></i> Agent Pipeline</h2>
-            <div class="agent-pipeline">
-                <div class="agent-node">
+            <div class="agent-pipeline" id="agentPipeline">
+                <div class="agent-node" id="agent1">
                     <div class="agent-icon"><i class="fas fa-eye"></i></div>
-                    <div class="agent-name">Document Intelligence</div>
-                    <div class="agent-status">Gemini Vision • OCR</div>
+                    <div class="agent-name">Doc Intelligence</div>
+                    <div class="agent-status">Gemini Vision</div>
                 </div>
                 <div class="connector"><i class="fas fa-chevron-right"></i></div>
-                <div class="agent-node">
+                <div class="agent-node" id="agent2">
                     <div class="agent-icon"><i class="fas fa-link"></i></div>
-                    <div class="agent-name">Matching Agent</div>
-                    <div class="agent-status">3-Tier Fuzzy Match</div>
+                    <div class="agent-name">Matching</div>
+                    <div class="agent-status">Fuzzy Match</div>
                 </div>
                 <div class="connector"><i class="fas fa-chevron-right"></i></div>
-                <div class="agent-node">
+                <div class="agent-node" id="agent3">
                     <div class="agent-icon"><i class="fas fa-search-dollar"></i></div>
-                    <div class="agent-name">Discrepancy Detection</div>
-                    <div class="agent-status">Price & Qty Analysis</div>
+                    <div class="agent-name">Discrepancy</div>
+                    <div class="agent-status">Analysis</div>
                 </div>
                 <div class="connector"><i class="fas fa-chevron-right"></i></div>
-                <div class="agent-node">
+                <div class="agent-node" id="agent4">
                     <div class="agent-icon"><i class="fas fa-gavel"></i></div>
-                    <div class="agent-name">Resolution Agent</div>
-                    <div class="agent-status">Decision Matrix</div>
+                    <div class="agent-name">Resolution</div>
+                    <div class="agent-status">Decision</div>
                 </div>
                 <div class="connector"><i class="fas fa-chevron-right"></i></div>
-                <div class="agent-node">
+                <div class="agent-node" id="agent5">
                     <div class="agent-icon"><i class="fas fa-user-check"></i></div>
-                    <div class="agent-name">Human Reviewer</div>
+                    <div class="agent-name">Human Review</div>
                     <div class="agent-status">Feedback Loop</div>
                 </div>
             </div>
@@ -517,66 +746,86 @@
                         <th>File</th>
                         <th>Matched PO</th>
                         <th>Confidence</th>
-                        <th>Discrepancies</th>
+                        <th>Issues</th>
                         <th>Action</th>
-                        <th>Time</th>
+                        <th>Details</th>
                     </tr>
                 </thead>
                 <tbody id="resultsBody">
-                    {% for result in results %}
-                    <tr>
-                        <td class="invoice-id">{{ result.invoice_id }}</td>
-                        <td>{{ result.document_info.filename }}</td>
-                        <td>
-                            {% if result.processing_results.matching_results %}
-                                {{ result.processing_results.matching_results.matched_po or 'N/A' }}
-                            {% else %}
-                                N/A
-                            {% endif %}
-                        </td>
-                        <td>
-                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                <div class="confidence-bar">
-                                    <div class="fill" style="width: {{ result.processing_results.extraction_confidence * 100 }}%"></div>
-                                </div>
-                                <span>{{ (result.processing_results.extraction_confidence * 100)|round|int }}%</span>
-                            </div>
-                        </td>
-                        <td>
-                            {% set disc_count = result.processing_results.discrepancies|length %}
-                            <span class="discrepancy-count {{ 'zero' if disc_count == 0 else '' }}">{{ disc_count }}</span>
-                        </td>
-                        <td>
-                            {% set action = result.processing_results.recommended_action %}
-                            {% if action == 'auto_approve' %}
-                                <span class="status-badge approve"><i class="fas fa-check"></i> Approve</span>
-                            {% elif action == 'flag_for_review' %}
-                                <span class="status-badge review"><i class="fas fa-flag"></i> Review</span>
-                            {% else %}
-                                <span class="status-badge escalate"><i class="fas fa-exclamation-triangle"></i> Escalate</span>
-                            {% endif %}
-                        </td>
-                        <td>{{ result.processing_duration_seconds }}s</td>
-                    </tr>
-                    {% endfor %}
+                    <!-- Results will be populated dynamically -->
                 </tbody>
             </table>
         </section>
     </div>
 
-    <!-- Loading Overlay -->
-    <div class="loading" id="loadingOverlay">
-        <div class="spinner"></div>
-        <p class="loading-text">Processing invoice with AI agents...</p>
+    <!-- Processing Modal -->
+    <div class="processing-modal" id="processingModal">
+        <div class="processing-content">
+            <h2>🤖 Processing Invoice</h2>
+            <div class="agent-progress">
+                <div class="agent-step" id="step1">
+                    <div class="step-icon"><i class="fas fa-eye"></i></div>
+                    <div class="step-name">Extract</div>
+                </div>
+                <div class="agent-step" id="step2">
+                    <div class="step-icon"><i class="fas fa-link"></i></div>
+                    <div class="step-name">Match</div>
+                </div>
+                <div class="agent-step" id="step3">
+                    <div class="step-icon"><i class="fas fa-search-dollar"></i></div>
+                    <div class="step-name">Detect</div>
+                </div>
+                <div class="agent-step" id="step4">
+                    <div class="step-icon"><i class="fas fa-gavel"></i></div>
+                    <div class="step-name">Resolve</div>
+                </div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+            </div>
+            <p class="status-text" id="statusText">Initializing AI agents...</p>
+        </div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div class="detail-modal" id="detailModal">
+        <div class="detail-content" id="detailContent">
+            <h2>
+                Invoice Details
+                <button class="close-btn" onclick="closeDetailModal()"><i class="fas fa-times"></i></button>
+            </h2>
+            <div class="detail-grid" id="detailGrid">
+                <!-- Details will be populated dynamically -->
+            </div>
+        </div>
     </div>
 
     <script>
-        // Fetch and update stats
+        let allResults = [];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchResults();
+            updateStats();
+        });
+
+        // Fetch existing results
+        async function fetchResults() {
+            try {
+                const response = await fetch('/api/results');
+                const data = await response.json();
+                allResults = data.results;
+                renderResults();
+            } catch (error) {
+                console.error('Failed to fetch results:', error);
+            }
+        }
+
+        // Update stats
         async function updateStats() {
             try {
                 const response = await fetch('/api/stats');
                 const data = await response.json();
-                
                 document.getElementById('totalInvoices').textContent = data.total_invoices;
                 document.getElementById('autoApproved').textContent = data.auto_approved;
                 document.getElementById('flaggedReview').textContent = data.flagged_for_review;
@@ -587,20 +836,216 @@
             }
         }
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            updateStats();
-            
-            // Add animation delays to stat cards
-            document.querySelectorAll('.stat-card').forEach((card, i) => {
-                card.style.animationDelay = `${i * 0.1}s`;
+        // Render results table
+        function renderResults() {
+            const tbody = document.getElementById('resultsBody');
+            tbody.innerHTML = '';
+
+            allResults.forEach((result, index) => {
+                const proc = result.processing_results || {};
+                const matching = proc.matching_results || {};
+                const discCount = (proc.discrepancies || []).length;
+                const action = proc.recommended_action || 'unknown';
+                const confidence = proc.extraction_confidence || 0;
+
+                const actionClass = action === 'auto_approve' ? 'approve' :
+                    action === 'flag_for_review' ? 'review' : 'escalate';
+                const actionIcon = action === 'auto_approve' ? 'check' :
+                    action === 'flag_for_review' ? 'flag' : 'exclamation-triangle';
+                const actionText = action === 'auto_approve' ? 'Approve' :
+                    action === 'flag_for_review' ? 'Review' : 'Escalate';
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="invoice-id">${result.invoice_id || 'Unknown'}</td>
+                    <td>${(result.document_info || {}).filename || 'N/A'}</td>
+                    <td>${matching.matched_po || 'N/A'}</td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div class="confidence-bar">
+                                <div class="fill" style="width: ${confidence * 100}%"></div>
+                            </div>
+                            <span>${Math.round(confidence * 100)}%</span>
+                        </div>
+                    </td>
+                    <td><span class="discrepancy-count ${discCount === 0 ? 'zero' : ''}">${discCount}</span></td>
+                    <td><span class="status-badge ${actionClass}"><i class="fas fa-${actionIcon}"></i> ${actionText}</span></td>
+                    <td><button class="view-btn" onclick="showDetails(${index})"><i class="fas fa-eye"></i> View</button></td>
+                `;
+                tbody.appendChild(row);
             });
-            
-            // Add animation delays to agent nodes
-            document.querySelectorAll('.agent-node').forEach((node, i) => {
-                node.style.animationDelay = `${i * 0.15}s`;
-            });
+        }
+
+        // File upload handling
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragover');
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file) processFile(file);
+        });
+
+        fileInput.addEventListener('change', () => {
+            const file = fileInput.files[0];
+            if (file) processFile(file);
+        });
+
+        // Process uploaded file
+        async function processFile(file) {
+            const modal = document.getElementById('processingModal');
+            const progressBar = document.getElementById('progressBar');
+            const statusText = document.getElementById('statusText');
+
+            modal.classList.add('active');
+
+            // Animate agent steps
+            const steps = ['step1', 'step2', 'step3', 'step4'];
+            const messages = [
+                'Extracting data with Gemini Vision...',
+                'Matching with Purchase Orders...',
+                'Detecting discrepancies...',
+                'Generating resolution...'
+            ];
+
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += 2;
+                if (progress > 95) progress = 95;
+                progressBar.style.width = progress + '%';
+
+                const stepIndex = Math.floor(progress / 25);
+                if (stepIndex < steps.length) {
+                    for (let i = 0; i <= stepIndex; i++) {
+                        document.getElementById(steps[i]).classList.add('active');
+                        if (i < stepIndex) {
+                            document.getElementById(steps[i]).classList.remove('active');
+                            document.getElementById(steps[i]).classList.add('completed');
+                        }
+                    }
+                    statusText.textContent = messages[stepIndex];
+                }
+            }, 200);
+
+            // Upload and process
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('/api/process', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                clearInterval(progressInterval);
+                progressBar.style.width = '100%';
+
+                steps.forEach(s => {
+                    document.getElementById(s).classList.remove('active');
+                    document.getElementById(s).classList.add('completed');
+                });
+
+                statusText.textContent = '✅ Processing complete!';
+
+                setTimeout(() => {
+                    modal.classList.remove('active');
+                    steps.forEach(s => document.getElementById(s).classList.remove('completed'));
+                    progressBar.style.width = '0%';
+                    fetchResults();
+                    updateStats();
+                }, 1500);
+
+            } catch (error) {
+                clearInterval(progressInterval);
+                statusText.textContent = '❌ Processing failed: ' + error.message;
+                setTimeout(() => {
+                    modal.classList.remove('active');
+                    progressBar.style.width = '0%';
+                }, 2000);
+            }
+        }
+
+        // Show details modal
+        function showDetails(index) {
+            const result = allResults[index];
+            const modal = document.getElementById('detailModal');
+            const grid = document.getElementById('detailGrid');
+            const content = document.getElementById('detailContent');
+
+            const proc = result.processing_results || {};
+            const matching = proc.matching_results || {};
+            const extracted = proc.extracted_data || {};
+            const discrepancies = proc.discrepancies || [];
+
+            let html = `
+                <div class="detail-item">
+                    <label>Invoice ID</label>
+                    <div class="value">${result.invoice_id}</div>
+                </div>
+                <div class="detail-item">
+                    <label>File Name</label>
+                    <div class="value">${(result.document_info || {}).filename}</div>
+                </div>
+                <div class="detail-item">
+                    <label>Matched PO</label>
+                    <div class="value">${matching.matched_po || 'N/A'}</div>
+                </div>
+                <div class="detail-item">
+                    <label>Match Method</label>
+                    <div class="value">${(matching.match_method || 'N/A').replace(/_/g, ' ')}</div>
+                </div>
+                <div class="detail-item">
+                    <label>Extraction Confidence</label>
+                    <div class="value">${Math.round((proc.extraction_confidence || 0) * 100)}%</div>
+                </div>
+                <div class="detail-item">
+                    <label>Match Confidence</label>
+                    <div class="value">${Math.round((matching.po_match_confidence || 0) * 100)}%</div>
+                </div>
+                <div class="detail-item">
+                    <label>Processing Time</label>
+                    <div class="value">${result.processing_duration_seconds}s</div>
+                </div>
+                <div class="detail-item">
+                    <label>Recommended Action</label>
+                    <div class="value">${(proc.recommended_action || '').toUpperCase().replace(/_/g, ' ')}</div>
+                </div>
+            `;
+
+            grid.innerHTML = html;
+
+            // Add discrepancies if any
+            if (discrepancies.length > 0) {
+                let discHtml = '<div class="discrepancy-list"><h3>⚠️ Discrepancies Found</h3>';
+                discrepancies.forEach(d => {
+                    discHtml += `<div class="discrepancy-item">${d.details || JSON.stringify(d)}</div>`;
+                });
+                discHtml += '</div>';
+                content.innerHTML = content.innerHTML.replace('</div><!-- end grid -->', '') + discHtml;
+            }
+
+            modal.classList.add('active');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.remove('active');
+        }
+
+        // Close modal on outside click
+        document.getElementById('detailModal').addEventListener('click', (e) => {
+            if (e.target.id === 'detailModal') closeDetailModal();
         });
     </script>
 </body>
+
 </html>
