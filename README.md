@@ -187,7 +187,7 @@ See [ANALYSIS.md](./ANALYSIS.md) for the 500-word written analysis covering:
 
 ## 🎥 Demo Video
 
-[Link to 5-minute demo video] - Shows:
+[Demo video](https://youtu.be/g_SrE6VLMvk) - Shows:
 - Processing all 5 invoices
 - Agent decision-making and reasoning chains
 - Critical test detection (Invoice 4 & 5)
